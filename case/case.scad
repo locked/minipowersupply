@@ -80,7 +80,7 @@ module case($case) {
         cube([$case[0]-thickness*2, $case[1], $case[2]-thickness*2]);
 
         // Thermal vents
-        vents();
+        //vents();
     }
 
     // horizontal supports
