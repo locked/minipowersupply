@@ -1,8 +1,8 @@
-thickness = 1.8;
+thickness = 1.6;
 pcb_thickness = 1.7;
 front_pcb = [180, 80];
 front_pcb_screw = [168, 68, 4, 8];	// x, z, diam, ecrou diam
-pcb_margin = 1.2;
+pcb_margin = 2.5;
 
 cubewidth = front_pcb[0] - front_pcb_screw[0] + pcb_margin;
 cubedepth = 10;
@@ -35,13 +35,13 @@ module vents() {
 module power_holes() {
     power_vent_diam = 38;
     power_vent_diam_pos = [40];
-    translate([case[0]/2 - thickness, case[1] - thickness - power_vent_diam_pos[0]/2, -case[2]/2 + thickness + power_vent_diam_pos[0]/2 + 2])
-    rotate([-90, 0, -90]) cylinder(h=thickness, d=power_vent_diam, $fn=30);
+    translate([case[0]/2 - thickness - 0.5, case[1] - thickness - power_vent_diam_pos[0]/2, -case[2]/2 + thickness + power_vent_diam_pos[0]/2 + 2])
+    rotate([-90, 0, -90]) cylinder(h=thickness*2, d=power_vent_diam, $fn=30);
 
     power_plug = [32, 25];
     power_plug_pos = [38];
-    translate([case[0]/2 - thickness, case[1] - thickness - power_plug_pos[0], case[2]/2 - thickness - power_plug[1] - 3])
-    cube([thickness, power_plug[0], power_plug[1]]);
+    translate([case[0]/2 - thickness - 0.5, case[1] - thickness - power_plug_pos[0], case[2]/2 - thickness - power_plug[1] - 3])
+    cube([thickness*2, power_plug[0], power_plug[1]]);
 
     for (screw = [0:1]) {
         translate([case[0]/2 - thickness - power_screws_x, case[1] - thickness, -case[2]/2 + thickness + power_screws_zs[screw]])
@@ -74,10 +74,11 @@ module case($case) {
 
     difference() {
         color("Grey")
-        cube([$case[0], $case[1], $case[2]]);
-        translate([thickness, -thickness, thickness])
-        color("Green")
-        cube([$case[0]-thickness*2, $case[1], $case[2]-thickness*2]);
+            cube([$case[0], $case[1], $case[2]]);
+        translate([thickness, pcb_thickness+0.5, thickness])
+            cube([$case[0]-thickness*2, $case[1]-pcb_thickness-1.5, $case[2]-thickness*2]);
+        translate([thickness+pcb_margin/2, 0, thickness+pcb_margin/2])
+            cube([$case[0]-thickness*2-pcb_margin, pcb_thickness+0.5, $case[2]-thickness*2-pcb_margin]);
 
         // Thermal vents
         //vents();
@@ -137,13 +138,13 @@ module case($case) {
         color("Yellow") {
             // PCB screw holes
             translate([-front_pcb_screw[0]/2, pcb_thickness, -front_pcb_screw[1]/2])
-                rotate([-90]) cylinder(h=4.2, d=4.9, $fn=12);
+                rotate([-90]) cylinder(h=4.5, d=5, $fn=12);
             translate([front_pcb_screw[0]/2, pcb_thickness, -front_pcb_screw[1]/2])
-                rotate([-90]) cylinder(h=4.2, d=4.9, $fn=12);
+                rotate([-90]) cylinder(h=4.5, d=5, $fn=12);
             translate([-front_pcb_screw[0]/2, pcb_thickness, front_pcb_screw[1]/2])
-                rotate([-90]) cylinder(h=4.2, d=4.9, $fn=12);
+                rotate([-90]) cylinder(h=4.5, d=5, $fn=12);
             translate([front_pcb_screw[0]/2, pcb_thickness, front_pcb_screw[1]/2])
-                rotate([-90]) cylinder(h=4.2, d=4.9, $fn=12);
+                rotate([-90]) cylinder(h=4.5, d=5, $fn=12);
         }
     }
     
