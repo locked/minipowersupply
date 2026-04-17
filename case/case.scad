@@ -7,7 +7,7 @@ pcb_margin = 2.5;
 cubewidth = front_pcb[0] - front_pcb_screw[0] + pcb_margin;
 cubedepth = 10;
 
-power_screws_x = 145;
+power_screws_x = 145.6;
 power_screws_zs = [12, 69];
 
 feet_width = 13.5;
@@ -22,13 +22,13 @@ case = [
 
 
 module vents() {
-	count = 30;
-	ventx = 60;
-	ventz = 35;
-	venty = 20;
+	count = 5;
+	ventx = thickness;
+	ventz = 30;
+	venty = 14;
 	for (number = [0:(count-1)]){
-        translate([$case[0]/2-ventx + number * ((ventx * 2)/count), $case[1] - venty, $case[2]/2 + ventz])
-        cube([ventx/count, venty, ventz]);
+        translate([$case[0] - thickness, -7 + venty + number * ((venty * 2)/count), ventz - thickness])
+            cube([ventx, venty/count/1.5, ventz]);
     }
 }
 
@@ -44,7 +44,10 @@ module power_holes() {
     cube([thickness*2, power_plug[0], power_plug[1]]);
 
     for (screw = [0:1]) {
-        translate([case[0]/2 - thickness - power_screws_x, case[1] - thickness, -case[2]/2 + thickness + power_screws_zs[screw]])
+        translate([
+            case[0]/2 - thickness - power_screws_x,
+            case[1] - thickness,
+            -case[2]/2 + thickness + power_screws_zs[screw]])
         rotate([-90, 0, 0]) cylinder(h=thickness, d=3, $fn=20);
     }
 }
@@ -77,11 +80,11 @@ module case($case) {
             cube([$case[0], $case[1], $case[2]]);
         translate([thickness, pcb_thickness+0.5, thickness])
             cube([$case[0]-thickness*2, $case[1]-pcb_thickness-1.5, $case[2]-thickness*2]);
-        translate([thickness+pcb_margin/2, 0, thickness+pcb_margin/2])
-            cube([$case[0]-thickness*2-pcb_margin, pcb_thickness+0.5, $case[2]-thickness*2-pcb_margin]);
+        translate([thickness+pcb_margin/2-0.2, 0, thickness+pcb_margin/2-0.2])
+            cube([$case[0]-thickness*2-pcb_margin+0.4, pcb_thickness+0.5, $case[2]-thickness*2-pcb_margin+0.4]);
 
         // Thermal vents
-        //vents();
+        vents();
     }
 
     // horizontal supports
